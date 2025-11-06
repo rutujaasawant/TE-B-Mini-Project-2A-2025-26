@@ -1,0 +1,13 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
