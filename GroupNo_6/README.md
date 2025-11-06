@@ -49,5 +49,3 @@ A complete AI-powered fashion recommendation platform that helps users discover 
 - Node.js 18+
 - Python 3.11+
 - PostgreSQL 15+ (optional for full features)
-
-### 1. Clone Repository
