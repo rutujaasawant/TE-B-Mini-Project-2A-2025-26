@@ -1,0 +1,35 @@
+id,user_id,name,type,power,status,consumption,created_at
+6,2,Office AC - User 2,ac,1800,on,15.3,2024-01-25T13:45:00
+7,2,Washing Machine - User 2,appliance,800,off,0.0,2024-02-05T08:30:00
+8,2,Living Room Lights - User 2,lights,80,on,1.2,2024-02-12T19:15:00
+9,2,Room Heater - User 2,heater,2000,on,6.8,2024-02-18T07:45:00
+10,2,Sound System - User 2,entertainment,300,on,3.4,2024-02-20T20:30:00
+11,3,Bedroom AC - User 3,ac,1200,off,0.0,2024-01-30T12:00:00
+12,3,Microwave - User 3,appliance,1000,off,0.0,2024-02-08T17:30:00
+13,3,Kitchen Lights - User 3,lights,100,on,1.8,2024-02-14T18:45:00
+14,3,Kitchen Heater - User 3,heater,1500,on,4.5,2024-02-16T06:30:00
+15,3,Gaming Console - User 3,entertainment,250,on,2.8,2024-02-22T21:15:00
+16,6,ac,ac,20,off,0.0,2025-09-27T10:11:16.408040
+17,6,Water heater,heater,200,on,1.9911442322699275,2025-09-27T10:11:43.365083
+18,6,Television,entertainment,36,on,0.4471942140035388,2025-09-27T10:12:00.619433
+19,6,Bedroom,lights,15,off,0.0,2025-09-27T10:12:19.431862
+20,6,Oven,appliance,70,on,0.9266954454272314,2025-09-27T10:12:42.314815
+23,8,Home Theater,entertainment,27,off,0.0,2025-09-27T10:56:17.438794
+24,8,Fans,ac,30,off,0.0,2025-09-27T10:56:39.010829
+25,8,Air Cooler,ac,200,off,0.0,2025-09-27T10:56:57.247989
+26,8,LED Bulbs,lights,15,off,0.0,2025-09-27T10:57:17.700013
+27,8,Tube Lights,appliance,20,off,0.0,2025-09-27T10:57:44.619097
+28,8,Mixer,appliance,45,off,0.0,2025-09-27T10:58:11.261601
+29,8,speker,entertainment,40,off,0.0,2025-09-27T17:25:55.525145
+30,1,hello,appliance,1200,off,0.0,2025-09-28T10:18:02.829146
+31,1,hello,appliance,1200,off,0.0,2025-09-28T10:18:02.862886
+32,1,hello,appliance,1200,off,0.0,2025-09-28T10:18:02.882418
+26,8,AC,ac,1500,off,0.0,2025-09-28T11:42:04.779812
+28,10,Water Heater,heater,30,on,0.29585285147281376,2025-09-29T17:48:50.495264
+29,10,Lights,appliance,20,on,0.24446821330789179,2025-09-29T17:49:04.399884
+30,10,Microwave Owen,appliance,40,on,0.40867051149013306,2025-09-29T17:49:32.158225
+31,10,Telelvision,entertainment,80,on,0.8721939789674855,2025-09-29T17:49:51.514317
+32,10,Bedroom,lights,20,on,0.21472865877308042,2025-09-29T17:50:05.209987
+33,10,Hall ,lights,30,off,0.0,2025-09-29T17:50:29.460427
+34,10,Speaker,entertainment,60,off,0.0,2025-09-29T17:52:09.576924
+34,8,ac,ac,20,off,0.0,2025-09-30T13:18:49.873483

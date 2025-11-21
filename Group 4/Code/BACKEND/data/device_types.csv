@@ -1,0 +1,11 @@
+type,category,typical_power_min,typical_power_max,efficiency_rating,usage_pattern
+ac,cooling,1200,2500,3.5,seasonal_high
+heater,heating,1000,3500,2.8,seasonal_high
+lights,lighting,20,150,4.2,daily_evening
+appliance,kitchen,100,2000,3.8,daily_multiple
+entertainment,electronics,50,500,3.2,evening_weekend
+washer,laundry,500,1200,3.5,weekly
+dryer,laundry,2000,4000,2.5,weekly
+dishwasher,kitchen,1200,2400,3.0,daily
+computer,electronics,200,800,3.8,daily_work
+router,electronics,10,50,4.5,always_on
