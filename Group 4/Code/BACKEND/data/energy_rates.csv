@@ -1,0 +1,9 @@
+region,rate_per_kwh,currency,peak_hours,off_peak_multiplier,seasonal_adjustment
+mumbai,8.50,INR,18:00-22:00,0.7,1.2
+delhi,9.20,INR,19:00-23:00,0.65,1.3
+bangalore,7.80,INR,18:30-22:30,0.75,1.1
+chennai,8.90,INR,18:00-22:00,0.7,1.25
+kolkata,8.10,INR,19:00-23:00,0.8,1.15
+pune,8.30,INR,18:30-22:30,0.72,1.18
+hyderabad,8.60,INR,18:00-22:00,0.68,1.22
+ahmedabad,8.40,INR,19:00-23:00,0.74,1.16

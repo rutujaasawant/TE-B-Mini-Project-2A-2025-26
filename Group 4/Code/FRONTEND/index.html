@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Energy Management System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --info: #4895ef;
+            --gray: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .dark-mode {
+            --primary: #4cc9f0;
+            --secondary: #4895ef;
+            --accent: #4361ee;
+            --light: #212529;
+            --dark: #f8f9fa;
+            --card-bg: rgba(33, 37, 41, 0.95);
+            --text-color: #f8f9fa;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow);
+            border: var(--border);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: none;
+        }
+
+        header {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1em;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 30px;
+            padding: 5px 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Updated Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .device-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dark-mode .device-item {
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        }
+
+        .device-item:hover {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            transform: translateX(5px);
+        }
+
+        .dark-mode .device-item:hover {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        .device-info {
+            flex-grow: 1;
+        }
+
+        .device-name {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .dark-mode .device-name {
+            color: var(--light);
+        }
+
+        .device-consumption {
+            font-size: 0.9em;
+            color: var(--gray);
+        }
+
+        .device-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-right: 40px;
+        }
+
+        .status-on {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-off {
+            background: var(--warning);
+            color: white;
+        }
+
+        .device-actions {
+            position: absolute;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #d00000;
+            transform: scale(1.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Updated Controls Section */
+        .controls-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+        }
+
+        .prediction-section {
+            text-align: center;
+        }
+
+        .prediction-result {
+            background: linear-gradient(135deg, var(--info) 0%, var(--primary) 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .prediction-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .alerts {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .dark-mode .alerts {
+            background: #742a2a;
+            border: 1px solid #993434;
+            color: #ff7a7a;
+        }
+
+        .energy-tips {
+            margin-top: 30px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            transition: transform 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tip-icon {
+            font-size: 2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .tip-content h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .tip-content p {
+            color: var(--gray);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: none;
+            color: var(--warning);
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Added error message styling */
+        .error-message {
+            background: #fed7d7;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            border: 1px solid #9ae6b4;
+            color: #2f855a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="animated-bg">
+    <!-- Authentication Section -->
+    <div class="auth-container" id="authContainer">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1><i class="fas fa-home"></i> Smart Home Energy</h1>
+                <p>Sign in to manage your energy consumption</p>
+            </div>
+            <!-- Added error message container -->
+            <div id="authError" class="error-message" style="display: none;"></div>
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="auth-btn" id="loginBtn">Sign In</button>
+            </form>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+            </div>
+        </div>
+
+        <div class="auth-card" id="signupCard" style="display: none;">
+            <div class="auth-header">
+                <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+                <p>Sign up to get started with energy management</p>
+            </div>
+            <!-- Added error message container for signup -->
+            <div id="signupError" class="error-message" style="display: none;"></div>
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="#" id="showLogin">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container" id="mainContainer">
+        <header>
+            <div class="header-content">
+                <div>
+                 <h1>⚡Smart Energy Forecasting with ARIMA Prediction</h1>
+                    <p class="subtitle">Monitor, Predict & Optimize Your Energy Consumption</p>
+                </div>
+                <div class="user-controls">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-info">
+                            <div id="userName">User</div>
+                            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Updated Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Device Management -->
+            <div class="card">
+                <h3><i class="fas fa-plug"></i> Device Management</h3>
+                <div class="device-list" id="deviceList">
+                    <!-- Devices will be populated here -->
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="card">
+                <h3><i class="fas fa-chart-pie"></i> Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalConsumption">0</div>
+                        <div class="stat-label">kWh Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="monthlyCost">₹0</div>
+                        <div class="stat-label">Monthly Cost</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="activeDevices">0</div>
+                        <div class="stat-label">Active Devices</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="efficiency">0%</div>
+                        <div class="stat-label">Efficiency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Updated Controls Section -->
+        <div class="controls-section">
+            <!-- Energy Consumption Chart -->
+            <div class="card">
+                <h3><i class="fas fa-chart-line"></i> Energy Consumption Trends</h3>
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Add New Device Card -->
+            <div class="card">
+                <h3><i class="fas fa-plus-circle"></i> Add New Device</h3>
+                <div class="form-group">
+                    <label for="deviceName">Device Name</label>
+                    <input type="text" id="deviceName" placeholder="e.g., Living Room AC">
+                </div>
+                <div class="form-group">
+                    <label for="deviceType">Device Type</label>
+                    <select id="deviceType">
+                        <option value="ac">Air Conditioner</option>
+                        <option value="heater">Heater</option>
+                        <option value="lights">Lights</option>
+                        <option value="appliance">Kitchen Appliance</option>
+                        <option value="entertainment">Entertainment</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="devicePower">Power Rating (Watts)</label>
+                    <input type="number" id="devicePower" placeholder="e.g., 1500">
+                </div>
+                <button onclick="addDevice()">Add Device</button>
+            </div>
+        </div>
+
+        <!-- System Settings and Prediction Section -->
+        <div class="controls-section">
+            <div class="card">
+                <h3><i class="fas fa-cog"></i> System Settings</h3>
+                <div class="form-group">
+                    <label for="electricityRate">Electricity Rate (₹/kWh)</label>
+                    <input type="number" id="electricityRate" value="8.0" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="predictionDays">Prediction Period (Days)</label>
+                    <select id="predictionDays">
+                        <option value="7">1 Week</option>
+                        <option value="14">2 Weeks</option>
+                        <option value="30" selected>1 Month</option>
+                        <option value="90">3 Months</option>
+                    </select>
+                </div>
+                <button onclick="updateSettings()">Update Settings</button>
+            </div>
+
+            <div class="card prediction-section">
+                <h3><i class="fas fa-crystal-ball"></i> ARIMA Energy Prediction</h3>
+                <button onclick="generatePrediction()" id="predictBtn">Generate Prediction</button>
+                <div id="predictionResult" style="display: none;">
+                    <div class="prediction-result">
+                        <div>Predicted Energy Consumption</div>
+                        <div class="prediction-value" id="predictedValue">0 kWh</div>
+                        <div>Estimated Cost: <span id="predictedCost">₹0</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energy Saving Tips -->
+        <div class="energy-tips">
+            <h3><i class="fas fa-lightbulb"></i> Energy Saving Tips</h3>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-thermometer-half"></i></div>
+                    <div class="tip-content">
+                        <h4>Optimize AC Temperature</h4>
+                        <p>Set your AC to 24°C for optimal comfort and energy savings. Each degree lower can increase energy consumption by 3-5%.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="tip-content">
+                        <h4>Use LED Bulbs</h4>
+                        <p>Replace incandescent bulbs with LED bulbs that use up to 80% less energy and last much longer.</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-plug"></i></div>
+                    <div class="tip-content">
+                        <h4>Unplug Devices</h4>
+                        <p>Unplug electronics when not in use. Many devices consume energy even when turned off (phantom load).</p>
+                    </div>
+                </div>
+                <div class="tip-card">
+                    <div class="tip-icon"><i class="fas fa-sun"></i></div>
+                    <div class="tip-content">
+                        <h4>Use Natural Light</h4>
+                        <p>Open curtains during the day to utilize natural light instead of artificial lighting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+        let authToken = localStorage.getItem('authToken');
+        let devices = [];
+        let settings = {
+            electricityRate: 8.0,
+            predictionDays: 30
+        };
+        let energyChart;
+        let currentUser = null;
+        let isDarkMode = false;
+
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${API_BASE_URL}${endpoint}`;
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            };
+
+            if (authToken && !config.headers.Authorization) {
+                config.headers.Authorization = `Bearer ${authToken}`;
+            }
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'API request failed');
+                }
+
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            if (authToken) {
+                // Verify token and load user data
+                loadUserData();
+            }
+
+            // Setup authentication event listeners
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+            document.getElementById('showSignup').addEventListener('click', showSignupForm);
+            document.getElementById('showLogin').addEventListener('click', showLoginForm);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('themePreference');
+            if (savedTheme === 'dark') {
+                enableDarkMode();
+            }
+        });
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.textContent;
+            
+            try {
+                loginBtn.innerHTML = '<span class="loading"></span> Signing In...';
+                loginBtn.disabled = true;
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                const response = await apiRequest('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
+
+                authToken = response.access_token;
+                currentUser = response.user;
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                showDashboard();
+                await loadDashboardData();
+
+            } catch (error) {
+                showError('authError', error.message || 'Login failed. Please try again.');
+            } finally {
+                loginBtn.textContent = originalText;
+                loginBtn.disabled = false;
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const signupBtn = document.getElementById('signupBtn');
+            const originalText = signupBtn.textContent;
+
+            try {
+                signupBtn.innerHTML = '<span class="loading"></span> Creating Account...';
+                signupBtn.disabled = true;
+
+                const name = document.getElementById('signupName').value;
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (password !== confirmPassword) {
+                    throw new Error('Passwords do not match');
+                }
+
+                const response = await apiRequest('/auth/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                authToken = response.access_token;
+                currentUser = response.user;
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                showDashboard();
+                await loadDashboardData();
+
+            } catch (error) {
+                showError('signupError', error.message || 'Signup failed. Please try again.');
+            } finally {
+                signupBtn.textContent = originalText;
+                signupBtn.disabled = false;
+            }
+        }
+
+        async function loadUserData() {
+            try {
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    currentUser = JSON.parse(savedUser);
+                    showDashboard();
+                    await loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+                handleLogout();
+            }
+        }
+
+        // Show signup form
+        function showSignupForm(e) {
+            if (e) e.preventDefault();
+            document.getElementById('loginForm').closest('.auth-card').style.display = 'none';
+            document.getElementById('signupCard').style.display = 'block';
+        }
+
+        // Show login form
+        function showLoginForm(e) {
+            if (e) e.preventDefault();
+            document.getElementById('signupCard').style.display = 'none';
+            document.getElementById('loginForm').closest('.auth-card').style.display = 'block';
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            
+            // Initialize dashboard components
+            initializeChart();
+        }
+
+        async function loadDashboardData() {
+            try {
+                await Promise.all([
+                    loadDevices(),
+                    loadStatistics(),
+                    loadConsumptionData()
+                ]);
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        async function loadDevices() {
+            try {
+                devices = await apiRequest('/devices');
+                updateDeviceList();
+            } catch (error) {
+                console.error('Failed to load devices:', error);
+            }
+        }
+
+        async function loadStatistics() {
+            try {
+                const stats = await apiRequest('/analytics/statistics');
+                document.getElementById('totalConsumption').textContent = stats.total_consumption;
+                document.getElementById('monthlyCost').textContent = '₹' + stats.monthly_cost;
+                document.getElementById('activeDevices').textContent = stats.active_devices;
+                document.getElementById('efficiency').textContent = stats.efficiency + '%';
+            } catch (error) {
+                console.error('Failed to load statistics:', error);
+            }
+        }
+
+        async function loadConsumptionData() {
+            try {
+                const data = await apiRequest('/analytics/consumption');
+                updateChart(data.daily_data);
+            } catch (error) {
+                console.error('Failed to load consumption data:', error);
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            authToken = null;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('authToken');
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('authContainer').style.display = 'flex';
+            showLoginForm();
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            if (isDarkMode) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        }
+
+        // Enable dark mode
+        function enableDarkMode() {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            isDarkMode = true;
+            localStorage.setItem('themePreference', 'dark');
+        }
+
+        // Disable dark mode
+        function disableDarkMode() {
+            document.body.classList.remove('dark-mode');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+            isDarkMode = false;
+            localStorage.setItem('themePreference', 'light');
+        }
+
+        // Initialize energy consumption chart
+        function initializeChart() {
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            
+            energyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Daily Consumption (kWh)',
+                        data: [],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Energy (kWh)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(dailyData) {
+            if (!energyChart || !dailyData) return;
+
+            const labels = dailyData.map(item => new Date(item.date).toLocaleDateString());
+            const data = dailyData.map(item => item.consumption);
+
+            energyChart.data.labels = labels;
+            energyChart.data.datasets[0].data = data;
+            energyChart.update();
+        }
+
+        // Update device list display
+        function updateDeviceList() {
+            const deviceList = document.getElementById('deviceList');
+            deviceList.innerHTML = '';
+
+            devices.forEach(device => {
+                const deviceElement = document.createElement('div');
+                deviceElement.className = 'device-item';
+                deviceElement.innerHTML = `
+                    <div class="device-info">
+                        <div class="device-name">${getDeviceIcon(device.type)} ${device.name}</div>
+                        <div class="device-consumption">${device.consumption.toFixed(1)} kWh • ${device.power}W</div>
+                    </div>
+                    <div class="device-status status-${device.status}" onclick="toggleDevice(${device.id})">
+                        ${device.status}
+                    </div>
+                    <div class="device-actions">
+                        <button class="delete-btn" onclick="deleteDevice(${device.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                deviceList.appendChild(deviceElement);
+            });
+        }
+
+        // Get device icon based on type
+        function getDeviceIcon(type) {
+            const icons = {
+                'ac': '❄',
+                'heater': '🔥',
+                'lights': '💡',
+                'appliance': '🍽',
+                'entertainment': '📺'
+            };
+            return icons[type] || '🔌';
+        }
+
+        async function toggleDevice(deviceId) {
+            try {
+                const device = devices.find(d => d.id === deviceId);
+                if (!device) return;
+
+                const newStatus = device.status === 'on' ? 'off' : 'on';
+                
+                await apiRequest(`/devices/${deviceId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                // Reload devices and statistics
+                await loadDevices();
+                await loadStatistics();
+            } catch (error) {
+                console.error('Failed to toggle device:', error);
+                alert('Failed to update device status');
+            }
+        }
+
+        async function deleteDevice(deviceId) {
+            if (!confirm('Are you sure you want to delete this device?')) return;
+
+            try {
+                await apiRequest(`/devices/${deviceId}`, {
+                    method: 'DELETE'
+                });
+
+                // Reload devices and statistics
+                await loadDevices();
+                await loadStatistics();
+            } catch (error) {
+                console.error('Failed to delete device:', error);
+                alert('Failed to delete device');
+            }
+        }
+
+        async function addDevice() {
+            const name = document.getElementById('deviceName').value;
+            const type = document.getElementById('deviceType').value;
+            const power = parseInt(document.getElementById('devicePower').value);
+
+            if (!name || !power) {
+                alert('Please fill in all device information');
+                return;
+            }
+
+            try {
+                await apiRequest('/devices', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: name,
+                        type: type,
+                        power: power,
+                        status: 'off'
+                    })
+                });
+
+                // Clear form
+                document.getElementById('deviceName').value = '';
+                document.getElementById('devicePower').value = '';
+
+                // Reload devices and statistics
+                await loadDevices();
+                await loadStatistics();
+            } catch (error) {
+                console.error('Failed to add device:', error);
+                alert('Failed to add device');
+            }
+        }
+
+        // Update system settings
+        function updateSettings() {
+            settings.electricityRate = parseFloat(document.getElementById('electricityRate').value);
+            settings.predictionDays = parseInt(document.getElementById('predictionDays').value);
+            loadStatistics(); // Refresh statistics with new rates
+            alert('Settings updated successfully!');
+        }
+
+        async function generatePrediction() {
+            const button = document.getElementById('predictBtn');
+            const result = document.getElementById('predictionResult');
+            const originalText = button.textContent;
+            
+            try {
+                button.innerHTML = '<span class="loading"></span> Generating Prediction...';
+                button.disabled = true;
+
+                const days = settings.predictionDays;
+                const prediction = await apiRequest('/analytics/predict', {
+                    method: 'POST',
+                    body: JSON.stringify({ days: days })
+                });
+
+                document.getElementById('predictedValue').textContent = prediction.predicted_consumption + ' kWh';
+                document.getElementById('predictedCost').textContent = '₹' + prediction.predicted_cost;
+                
+                result.style.display = 'block';
+
+                // Add prediction to chart
+                addPredictionToChart(prediction.daily_average);
+
+            } catch (error) {
+                console.error('Failed to generate prediction:', error);
+                alert('Failed to generate prediction');
+            } finally {
+                button.textContent = 'Generate New Prediction';
+                button.disabled = false;
+            }
+        }
+
+        // Add prediction line to chart
+        function addPredictionToChart(dailyPrediction) {
+            const chart = energyChart;
+            if (!chart) return;
+
+            const futureLabels = [];
+            const futureData = [];
+            
+            for (let i = 1; i <= 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                futureLabels.push(date.toLocaleDateString());
+                futureData.push(dailyPrediction * (0.9 + Math.random() * 0.2));
+            }
+
+            // Add prediction dataset
+            if (chart.data.datasets.length > 1) {
+                chart.data.datasets.pop(); // Remove previous prediction
+            }
+
+            chart.data.datasets.push({
+                label: 'ARIMA Prediction',
+                data: [...Array(chart.data.labels.length).fill(null), ...futureData],
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderDash: [5, 5],
+                tension: 0.4,
+                fill: false
+            });
+
+            chart.data.labels = [...chart.data.labels, ...futureLabels];
+            chart.update();
+        }
+
+        function simulateRealTimeData() {
+            setInterval(async () => {
+                try {
+                    await loadStatistics();
+                    
+                    // Occasionally update chart with new data
+                    if (Math.random() < 0.1) {
+                        await loadConsumptionData();
+                    }
+                } catch (error) {
+                    console.error('Real-time update failed:', error);
+                }
+            }, 30000); // Update every 30 seconds
+        }
+
+        // Initialize settings from UI
+        document.getElementById('electricityRate').value = settings.electricityRate;
+        document.getElementById('predictionDays').value = settings.predictionDays;
+    </script>
+</body>
+</html>

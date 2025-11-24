@@ -1,0 +1,154 @@
+{
+  "title": "Smart Energy Management API Documentation",
+  "version": "1.0.0",
+  "description": "Complete API documentation for the Smart Home Energy Management System",
+  "base_url": "http://localhost:8000",
+  "endpoints": {
+    "authentication": {
+      "signup": {
+        "method": "POST",
+        "url": "/auth/signup",
+        "description": "Register a new user",
+        "body": {
+          "name": "string",
+          "email": "string",
+          "password": "string"
+        },
+        "response": {
+          "access_token": "string",
+          "token_type": "bearer",
+          "user": {
+            "id": "integer",
+            "name": "string",
+            "email": "string",
+            "avatar": "string"
+          }
+        }
+      },
+      "login": {
+        "method": "POST",
+        "url": "/auth/login",
+        "description": "Login existing user",
+        "body": {
+          "email": "string",
+          "password": "string"
+        },
+        "response": {
+          "access_token": "string",
+          "token_type": "bearer",
+          "user": {
+            "id": "integer",
+            "name": "string",
+            "email": "string",
+            "avatar": "string"
+          }
+        }
+      }
+    },
+    "devices": {
+      "get_devices": {
+        "method": "GET",
+        "url": "/devices",
+        "description": "Get all user devices",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response": [
+          {
+            "id": "integer",
+            "name": "string",
+            "type": "string",
+            "power": "integer",
+            "status": "string",
+            "consumption": "float"
+          }
+        ]
+      },
+      "create_device": {
+        "method": "POST",
+        "url": "/devices",
+        "description": "Create a new device",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "body": {
+          "name": "string",
+          "type": "string",
+          "power": "integer",
+          "status": "string"
+        }
+      },
+      "update_device": {
+        "method": "PUT",
+        "url": "/devices/{device_id}",
+        "description": "Update device status or consumption",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "body": {
+          "status": "string (optional)",
+          "consumption": "float (optional)"
+        }
+      },
+      "delete_device": {
+        "method": "DELETE",
+        "url": "/devices/{device_id}",
+        "description": "Delete a device",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        }
+      }
+    },
+    "analytics": {
+      "consumption": {
+        "method": "GET",
+        "url": "/analytics/consumption",
+        "description": "Get consumption data and daily trends",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response": {
+          "total_consumption": "float",
+          "active_devices": "integer",
+          "daily_data": [
+            {
+              "date": "string",
+              "consumption": "float"
+            }
+          ]
+        }
+      },
+      "statistics": {
+        "method": "GET",
+        "url": "/analytics/statistics",
+        "description": "Get energy statistics",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "response": {
+          "total_consumption": "float",
+          "monthly_cost": "float",
+          "active_devices": "integer",
+          "efficiency": "float"
+        }
+      },
+      "predict": {
+        "method": "POST",
+        "url": "/analytics/predict",
+        "description": "Generate ARIMA energy consumption prediction",
+        "headers": {
+          "Authorization": "Bearer <token>"
+        },
+        "body": {
+          "days": "integer"
+        },
+        "response": {
+          "predicted_consumption": "float",
+          "predicted_cost": "float",
+          "daily_average": "float",
+          "prediction_days": "integer"
+        }
+      }
+    }
+  }
+}
